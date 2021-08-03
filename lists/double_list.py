@@ -1,0 +1,209 @@
+from linked_list import Node as SingleNode
+
+from linked_list import LinkedList
+
+class Node(SingleNode):
+    def __init__(self, data=None, next=None, prev=None):
+        super().__init__(data,next)
+        self.prev = prev
+        
+class Double_List_Iter():
+     ''' Iterator class '''
+     def __init__(self, double_list):
+        # Team object reference
+        self._double_list = double_list
+        # member variable to keep track of current index
+        self._index = -1
+       
+     def __next__(self):
+        ''''Returns the next value from double_list object's lists '''
+        
+        
+        self._index = self._index + 1
+        
+        if self._index == len(self._double_list):
+            raise StopIteration
+            
+        else:
+                
+            itter = self._double_list.head
+            counter = 0
+            
+            while itter and (counter < self._index):
+                
+                itter = itter.next
+                counter += 1
+                
+            return itter
+                
+                 
+       
+        
+class Double_List(LinkedList):
+    def __init__(self):
+        self.head = None
+    
+    
+    def __iter__(self):
+        
+        ''' Returns the Iterator object '''
+        return Double_List_Iter(self)
+    
+    def update_tail_from_nodes(self):
+        
+        itter = self.head
+        
+        len_items = len(self)
+        
+        if len_items > 1:
+            counter = 0
+            
+            while itter:
+                itter_copy = itter
+                itter = itter.next
+                
+                if counter == 0:
+                    pass
+                
+                counter += 1
+                
+                if counter < len_items:
+                    
+                    itter.prev = itter_copy    
+    
+    
+    def add_at_beginning(self, data):
+        
+        node = Node(data, self.head, None)
+        self.head = node
+        
+        
+    def add_at_end(self, data):
+        if self.head == None:
+            self.add_at_beginning(data)
+            
+        else:
+            
+            itter = self.head
+            
+            
+            while itter.next is not None:
+                itter = itter.next
+                
+            
+            itter.next = Node(data, None)
+                
+        self.update_tail_from_nodes()
+        
+            
+            
+    def add_at_position(self, data, pos):
+        
+        if pos == 0:
+            self.add_at_beginning(data)
+        
+        elif pos == -1 or pos == len(self):
+            self.add_at_end(data)
+        
+        else:
+            
+            counter = 1
+            
+            itter = self.head
+            
+            while itter.next is not None:
+                itter = itter.next
+                counter += 1
+                
+                if counter == pos:
+                    break
+                
+            node = Node(data, itter.next, None)
+                
+            
+            itter.next = node
+            itter.prev = itter
+        
+        self.update_tail_from_nodes()
+        
+    def print_forward(self):
+        return self.__str__()
+    
+    def get_last_node(self):
+        itr = self.head
+        while itr.next:
+            itr = itr.next
+
+        return itr
+    
+    
+    def print_backwards(self):
+        if self.head is None:
+            print('Linked List is empty')
+            
+        last_n = self.get_last_node()
+        String = str(last_n.data)
+        
+        itter = last_n.prev
+        
+        while itter.prev:
+            itter = itter.prev
+            
+            String = String + ' ---> ' + str(itter.data)
+            
+        return String
+        
+        
+    
+if '__main__' == __name__:
+    
+    LL = Double_List()
+    LL.add_at_beginning(2)
+    LL.add_at_beginning(4)
+    LL.add_at_beginning(1)
+    LL.add_at_end('end_1')
+    LL.add_at_end('end_2')
+    
+    LL.add_at_position(555, 3)
+    LL.add_at_position(111, 3)
+    
+    
+    print('Prior removal: \t', LL)
+    
+    
+    LL.remove_at_position(3)
+    print('After removal: \t', LL)
+    
+    LL.split_at_position(4)
+    
+    print('Spliting at position 4: \t', LL
+          )
+    
+    LL.insert_after_value(555, 'data after 555')
+    LL.insert_after_value(4, 'after_data_inserted')
+    
+    print('LL after value insertion: \t', LL)
+    
+    
+    for key in ['data after 555', 'after_data_inserted']:
+    
+        print('Removing by value "{0}"'.format(key))
+        
+        LL.remove_by_value(key)
+        
+        print('\t', LL)
+    
+    
+    print('Printing backwards')
+    
+    print(LL.print_backwards())
+
+                
+                    
+            
+        
+        
+        
+        
+        
+        

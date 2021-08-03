@@ -1,0 +1,9 @@
+from linked_list import Node, LinkedList
+
+class Double_Node(Node):
+    def __init__(self, data=None, next=None, prev=None):
+        Node.__init__(self, data,next)
+        self.prev = prev
+        
+        
+        
